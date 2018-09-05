@@ -25,20 +25,22 @@ class Application {
         }
 
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
-        this.gl.clearColor(0,0,0,0);
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+        this.gl.clearColor(0, 0, 0, 0);
+        this.gl.clearDepth(1.0);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
         const w = 640;
         const h = 480;
         this.gl.viewport((this.gl.canvas.width-w)/2, (this.gl.canvas.height-h)/2, w, h);
         this.fx.sprite.ortho(0, w, 0, h);
+        this.fx.model.ortho(0, w, 0, h);
 
         this.scene.draw(this.fx);
     }
 
     loop() {
         requestAnimationFrame(() => this.loop());
-        
+        this.input.update();
         this.scene.update(this.input);
         this.draw();
     }

@@ -38,12 +38,18 @@ class FxSprite {
         this.mainColorValue = vec4.fromValues(1,1,1,1);
         this.textureColor = this.gl.getUniformLocation(this.program, "textureColor");
         this.textureColorValue = "";
+        this.blendMode = 0;
 
         this.textures = new Map();
         this.textures["white"] = Util.whiteTexture(this.gl);
     }
 
     load(path) {
+        if(this.textures[path] != null) {
+            return;
+        }
+        
+        this.textures[path] = "loading";
         Util.loadTextureAsync(this.gl, path).then((texture) => {
             this.textures[path] = texture;
         });
@@ -72,20 +78,36 @@ class FxSprite {
         this.textureColorValue = path;
     }
 
+    getTexture() {
+        let texture = this.textures[this.textureColorValue];
+        if(texture === "loading") {
+            texture = null;
+        }
+        return texture ? texture : this.textures["white"];
+    }
+
     uv(u0, v0, u1, v1) {
         vec4.set(this.texcoordValue, u0, v0, u1, v1);
     }
 
+    blend(mode) {
+        this.blendMode = mode;
+    }
+
     draw() {
+        this.gl.disable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.BLEND);
-        this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+        if(this.blendMode == 0) {
+            this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
+        } else {
+            this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE);
+        }
         this.gl.useProgram(this.program);
         this.gl.uniformMatrix4fv(this.world, false, this.worldValue);
         this.gl.uniformMatrix4fv(this.projection, false, this.projectionValue);
         this.gl.uniform4fv(this.texcoord, this.texcoordValue);
         this.gl.activeTexture(this.gl.TEXTURE0);
-        let texture = this.textures[this.textureColorValue];
-        this.gl.bindTexture(this.gl.TEXTURE_2D, texture ? texture : this.textures["white"]);
+        this.gl.bindTexture(this.gl.TEXTURE_2D, this.getTexture());
         this.gl.uniform1i(this.textureColor, 0);
         this.gl.uniform4fv(this.mainColor, this.mainColorValue);
         this.gl.drawArrays(this.gl.TRIANGLE_STRIP, 0, 4);
