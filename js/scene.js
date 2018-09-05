@@ -90,12 +90,15 @@ class Scene {
     dirDrill(input) {
         if(input.up()) {
             this.dir = 0;
+            if(this.y <= 0) {
+                this.dir = 1;
+            }
         } else if(input.down()) {
             this.dir = 2;
+            if(this.y >= 8) {
+                this.dir = 1;
+            }
         } else {
-            this.dir = 1;
-        }
-        if(this.y <= 0 || this.y >= 8) {
             this.dir = 1;
         }
     }
