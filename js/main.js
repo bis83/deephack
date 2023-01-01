@@ -2,7 +2,7 @@
 
 class Application {
     constructor() {
-        this.canvas = document.createElement("canvas");
+        this.canvas = document.getElementById("main");
         document.body.appendChild(this.canvas);
         this.gl = this.canvas.getContext("webgl2");
         this.fx = {
@@ -12,6 +12,9 @@ class Application {
         this.input = new Input();
         this.scene = new Scene();
         this.scene.onload(this.input, this.fx);
+
+        const elem = document.getElementById("message");
+        elem.style.display = `none`;
     }
 
     draw() {
