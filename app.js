@@ -674,7 +674,6 @@
   class Application {
     constructor() {
       this.canvas = document.getElementById("main");
-      document.body.appendChild(this.canvas);
       this.gl = this.canvas.getContext("webgl2");
       this.fx = {
         sprite: new FxSprite(this.gl),
