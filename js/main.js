@@ -12,8 +12,7 @@ class Application {
         this.scene = new Scene();
         this.scene.onload(this.input, this.fx);
 
-        const elem = document.getElementById("message");
-        elem.style.display = `none`;
+        hide_message();
     }
 
     draw() {

@@ -3,7 +3,7 @@ message = "Deep Hack"
 extern-script = [
   "deps/gl-matrix-min.js",
 ]
-minify = false
+minify = true
 script = [
   "js/util.js",
   "js/input.js",
