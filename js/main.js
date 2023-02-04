@@ -47,7 +47,7 @@ class Application {
   }
 }
 
-window.onload = () => {
+html_listen(window, "load", () => {
   let app = new Application();
   app.loop();
-};
+});
