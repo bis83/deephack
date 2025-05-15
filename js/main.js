@@ -11,8 +11,6 @@ class Application {
     this.input = new Input();
     this.scene = new Scene();
     this.scene.onload(this.input, this.fx);
-
-    html_hide_message();
   }
 
   draw() {
